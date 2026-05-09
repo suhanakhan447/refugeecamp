@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Volunteers</h2>
+<div class="row"><div class="col-md-4"><div class="card"><div class="card-header">Add Volunteer</div><div class="card-body"><form method="POST" action="/volunteers/add"><input type="text" name="name" class="form-control mb-2" placeholder="Name"><input type="text" name="skills" class="form-control mb-2" placeholder="Skills"><input type="text" name="zone" class="form-control mb-2" placeholder="Zone"><button type="submit" class="btn btn-primary">Add</button></form></div></div></div><div class="col-md-8"><div class="card"><div class="card-header">List</div><div class="card-body"><table class="table">{% for v in volunteers %}<tr><td>{{ v.name }}</td><td>{{ v.skills }}</td><td>{{ v.assigned_zone }}</td><td>{% if v.is_available %}✅ Available{% else %}❌ Busy{% endif %}</td><td><a href="/volunteers/toggle/{{ v.id }}" class="btn btn-sm btn-warning">Toggle</a></td></tr>{% endfor %}</table></div></div></div></div>
+{% endblock %}

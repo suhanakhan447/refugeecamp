@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add Family</h2>
+<form method="POST">
+    <input type="text" name="head_name" class="form-control mb-2" placeholder="Head Name" required>
+    <input type="number" name="total_members" class="form-control mb-2" placeholder="Members" required>
+    <input type="number" name="children_count" class="form-control mb-2" placeholder="Children">
+    <input type="number" name="elderly_count" class="form-control mb-2" placeholder="Elderly">
+    <input type="number" name="disabled_count" class="form-control mb-2" placeholder="Disabled">
+    <input type="text" name="camp_zone" class="form-control mb-2" placeholder="Zone (A/B/C/D)">
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/families" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

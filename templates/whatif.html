@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>What-If Simulator</h2>
+<div class="row"><div class="col-md-6"><div class="card"><div class="card-header">Supply Decrease</div><div class="card-body"><button class="btn btn-warning m-1" onclick="simulate('supply_decrease',20)">20% Less</button><button class="btn btn-warning m-1" onclick="simulate('supply_decrease',40)">40% Less</button><button class="btn btn-danger m-1" onclick="simulate('supply_decrease',60)">60% Less</button><div id="supplyResult" class="mt-3"></div></div></div></div><div class="col-md-6"><div class="card"><div class="card-header">Population Increase</div><div class="card-body"><button class="btn btn-warning m-1" onclick="simulate('population_increase',50)">+50 Families</button><button class="btn btn-warning m-1" onclick="simulate('population_increase',100)">+100 Families</button><button class="btn btn-danger m-1" onclick="simulate('population_increase',200)">+200 Families</button><div id="popResult" class="mt-3"></div></div></div></div></div>
+<script>
+function simulate(scenario,value){fetch('/api/whatif',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario:scenario,value:value})}).then(r=>r.json()).then(d=>{if(scenario=='supply_decrease'){document.getElementById('supplyResult').innerHTML=`<div class="alert alert-info">Food: ${d.new_food} kg<br>Shortage: ${d.shortage} kg<br>⚠️ ${d.recommendation}</div>`}else{document.getElementById('popResult').innerHTML=`<div class="alert alert-info">New People: ${d.new_people}<br>Food Gap: ${d.food_gap} kg<br>⚠️ ${d.recommendation}</div>`}});}
+</script>
+{% endblock %}

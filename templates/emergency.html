@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><i class="fas fa-bolt"></i> Emergency Response System</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <i class="fas fa-plus"></i> New Emergency Request
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/emergency/add">
+                    <div class="mb-2">
+                        <label>Select Family</label>
+                        <select name="family_id" class="form-control" required>
+                            <option value="">-- Select Family --</option>
+                            {% for f in families %}
+                            <option value="{{ f.id }}">{{ f.family_code }} - {{ f.head_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label>Emergency Type</label>
+                        <select name="emergency_type" class="form-control" required>
+                            <option value="medical">🚑 Medical</option>
+                            <option value="food">🍞 Food</option>
+                            <option value="water">💧 Water</option>
+                            <option value="shelter">🏠 Shelter</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label>Severity</label>
+                        <select name="severity" class="form-control" required>
+                            <option value="1">🔴 HIGH - Immediate response needed</option>
+                            <option value="2">🟡 MEDIUM - Respond within 24 hours</option>
+                            <option value="3">🟢 LOW - Respond within 3 days</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Describe the emergency..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100">
+                        <i class="fas fa-bell"></i> Send Emergency Alert
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <i class="fas fa-list"></i> Active Emergency Requests
+            </div>
+            <div class="card-body">
+                {% if emergencies %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Family</th>
+                                <th>Type</th>
+                                <th>Severity</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in emergencies %}
+                            <tr class="{% if e.severity == 1 %}table-danger{% elif e.severity == 2 %}table-warning{% endif %}">
+                                <td>{{ e.id }}</td>
+                                <td>{{ e.family_id }}</td>
+                                <td>
+                                    {% if e.emergency_type == 'medical' %}🚑 Medical
+                                    {% elif e.emergency_type == 'food' %}🍞 Food
+                                    {% elif e.emergency_type == 'water' %}💧 Water
+                                    {% else %}🏠 Shelter{% endif %}
+                                </td>
+                                <td>
+                                    {% if e.severity == 1 %}🔴 HIGH
+                                    {% elif e.severity == 2 %}🟡 MEDIUM
+                                    {% else %}🟢 LOW{% endif %}
+                                </td>
+                                <td>{{ e.description[:50] }}...</td>
+                                <td>
+                                    {% if e.status == 'pending' %}
+                                        <span class="badge bg-danger">PENDING</span>
+                                    {% else %}
+                                        <span class="badge bg-success">RESOLVED</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if e.status == 'pending' %}
+                                        <a href="/emergency/resolve/{{ e.id }}" class="btn btn-sm btn-success" onclick="return confirm('Mark this emergency as resolved?')">
+                                            <i class="fas fa-check"></i> Resolve
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">Resolved</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> No active emergencies. All systems normal.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-info text-white">
+                <i class="fas fa-info-circle"></i> Emergency Protocol
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><strong>HIGH Severity:</strong> Immediate response required. Assign volunteer within 30 minutes.</li>
+                    <li><strong>MEDIUM Severity:</strong> Respond within 24 hours.</li>
+                    <li><strong>LOW Severity:</strong> Respond within 3 days.</li>
+                    <li>All emergencies are logged and tracked for accountability.</li>
+                    <li>Priority is given to families with higher vulnerability scores.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

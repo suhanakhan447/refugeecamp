@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Families</h2>
+<a href="/families/add" class="btn btn-primary mb-3">Add Family</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Code</th><th>Head</th><th>Members</th><th>Priority</th><th>Zone</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for f in families %}
+        <tr>
+            <td>{{ f.family_code }}</td><td>{{ f.head_name }}</td><td>{{ f.total_members }}</td>
+            <td>{{ f.priority_score }}</td><td>{{ f.camp_zone }}</td>
+            <td><a href="/families/edit/{{ f.id }}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="/families/delete/{{ f.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

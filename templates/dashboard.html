@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+<div class="row mb-4">
+    <div class="col-md-3"><div class="card bg-primary text-white p-3 text-center"><h5>Families</h5><h2>{{ total_families }}</h2></div></div>
+    <div class="col-md-3"><div class="card bg-success text-white p-3 text-center"><h5>People</h5><h2>{{ total_people }}</h2></div></div>
+    <div class="col-md-3"><div class="card bg-warning p-3 text-center"><h5>Vulnerable</h5><h2>{{ vulnerable_families }}</h2></div></div>
+    <div class="col-md-3"><div class="card bg-info text-white p-3 text-center"><h5>Fairness</h5><h2>{{ fairness_score }}</h2></div></div>
+</div>
+<div class="row">
+    <div class="col-md-6"><div class="card"><div class="card-header">Resources</div><div class="card-body"><canvas id="resourceChart"></canvas></div></div></div>
+    <div class="col-md-6"><div class="card"><div class="card-header">Priority Distribution</div><div class="card-body"><canvas id="priorityChart"></canvas></div></div></div>
+</div>
+<script>
+fetch('/api/chart_data').then(r=>r.json()).then(d=>{
+    new Chart(document.getElementById('resourceChart'),{type:'bar',data:{labels:Object.keys(d.resources),datasets:[{label:'Quantity',data:Object.values(d.resources),backgroundColor:'#1976d2'}]}});
+    new Chart(document.getElementById('priorityChart'),{type:'pie',data:{labels:Object.keys(d.priority_distribution),datasets:[{data:Object.values(d.priority_distribution),backgroundColor:['#dc3545','#fd7e14','#ffc107','#28a745']}]}});
+});
+</script>
+{% endblock %}

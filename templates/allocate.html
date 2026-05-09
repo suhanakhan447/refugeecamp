@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Fair Resource Allocation</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">Available Resources</div>
+            <div class="card-body">
+                <p>🍞 Food: {{ resources.get('food', 0) }} kg</p>
+                <p>💧 Water: {{ resources.get('water', 0) }} L</p>
+                <p>💊 Medicine: {{ resources.get('medicine', 0) }} units</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-success text-white">Run Allocation</div>
+            <div class="card-body">
+                <form method="POST">
+                    <button type="submit" class="btn btn-success w-100">🚀 Run Fair Allocation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Families (Sorted by Priority)</div>
+            <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-sm">
+                    <thead>
+                        <tr><th>Family Code</th><th>Members</th><th>Priority Score</th><th>Vulnerability</th><th>Zone</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for f in families %}
+                        <tr class="{% if f.priority_score >= 15 %}table-danger{% elif f.priority_score >= 10 %}table-warning{% endif %}">
+                            <td>{{ f.family_code }}</td>
+                            <td>{{ f.total_members }}</td>
+                            <td>{{ f.priority_score }}</td>
+                            <td>{{ f.get_vulnerability_level() }}</td>
+                            <td>{{ f.camp_zone }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

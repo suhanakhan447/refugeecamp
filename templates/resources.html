@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Resources</h2>
+<div class="row">{% for r in resources %}<div class="col-md-3"><div class="card"><div class="card-body"><h5>{{ r.resource_type|capitalize }}</h5><h3>{{ r.quantity }} {{ r.unit }}</h3><form method="POST" action="/resources/edit/{{ r.id }}"><input type="number" name="quantity" class="form-control" value="{{ r.quantity }}"><button type="submit" class="btn btn-primary mt-2">Update</button></form></div></div></div>{% endfor %}</div>
+{% endblock %}
